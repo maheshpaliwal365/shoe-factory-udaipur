@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoe Factory - Where Every Step Tells a Story</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-black: #0a0a0a;
+            --secondary-black: #1a1a1a;
+            --white: #ffffff;
+            --gold: #d4af37;
+            --light-gold: #f4e4b8;
+            --gray: #888;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--primary-black);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-100px) translateX(50px); }
+            50% { transform: translateY(-50px) translateX(-50px); }
+            75% { transform: translateY(-150px) translateX(100px); }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1.5rem 5%;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            padding: 1rem 5%;
+            box-shadow: 0 5px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--gold), var(--light-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 5px var(--gold)); }
+            50% { filter: drop-shadow(0 0 20px var(--gold)); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            z-index: 10;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--white), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideIn 1s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .tagline {
+            font-size: 1.8rem;
+            color: var(--light-gold);
+            margin-bottom: 2rem;
+            font-style: italic;
+            animation: fadeIn 1.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: linear-gradient(135deg, var(--gold), var(--light-gold));
+            color: var(--primary-black);
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 6rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, var(--white), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: var(--gold);
+            margin: 1rem auto;
+        }
+
+        /* Categories Section */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .category-card {
+            background: var(--secondary-black);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.5s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+
+        .category-card:hover::before {
+            left: 100%;
+        }
+
+        .category-card:hover {
+            transform: translateY(-15px) rotateY(5deg);
+            border-color: var(--gold);
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.4);
+        }
+
+        .category-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: rotate3d 3s infinite;
+        }
+
+        @keyframes rotate3d {
+            0%, 100% { transform: rotateY(0deg); }
+            50% { transform: rotateY(180deg); }
+        }
+
+        .category-card h3 {
+            color: var(--gold);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .availability {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(212, 175, 55, 0.2);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--light-gold);
+            margin-top: 1rem;
+        }
+
+        .available {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+
+        /* Products Section */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .product-card {
+            background: var(--secondary-black);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 25px 60px rgba(212, 175, 55, 0.4);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-info h3 {
+            color: var(--gold);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-info p {
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            color: var(--white);
+            font-weight: bold;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-text {
+            animation: fadeInLeft 1s ease;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .about-text h2 {
+            color: var(--gold);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-text p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .about-image {
+            background: linear-gradient(135deg, var(--secondary-black), var(--primary-black));
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            font-size: 8rem;
+            border: 2px solid var(--gold);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .contact-info {
+            background: var(--secondary-black);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid var(--gold);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            transform: translateX(10px);
+            background: rgba(212, 175, 55, 0.2);
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            color: var(--gold);
+        }
+
+        .contact-details h3 {
+            color: var(--gold);
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-details p {
+            color: var(--gray);
+        }
+
+        .map-container {
+            background: var(--secondary-black);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid var(--gold);
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary-black);
+            padding: 2rem 5%;
+            text-align: center;
+            border-top: 2px solid var(--gold);
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: var(--gray);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .tagline {
+                font-size: 1.2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .about-content,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <!-- Header -->
+    <header id="header">
+        <nav>
+            <div class="logo">SHOE FACTORY</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>SHOE FACTORY</h1>
+            <p class="tagline">Where Every Step Tells a Story</p>
+            <a href="#categories" class="cta-button">Explore Collection</a>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories">
+        <h2 class="section-title fade-in">Our Premium Categories</h2>
+        <div class="categories-grid">
+            <div class="category-card fade-in">
+                <div class="category-icon">👟</div>
+                <h3>Sports Shoes</h3>
+                <p>High-performance athletic footwear</p>
+                <span class="availability available">✓ In Stock</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">👞</div>
+                <h3>Formal Shoes</h3>
+                <p>Elegant shoes for every occasion</p>
+                <span class="availability available">✓ In Stock</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">👠</div>
+                <h3>Women's Heels</h3>
+                <p>Stylish and comfortable heels</p>
+                <span class="availability available">✓ In Stock</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">🥾</div>
+                <h3>Boots</h3>
+                <p>Durable boots for all terrains</p>
+                <span class="availability available">✓ In Stock</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">🩴</div>
+                <h3>Sandals</h3>
+                <p>Comfortable casual footwear</p>
+                <span class="availability available">✓ In Stock</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">👶</div>
+                <h3>Kids Shoes</h3>
+                <p>Fun and comfortable for little feet</p>
+                <span class="availability available">✓ In Stock</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products">
+        <h2 class="section-title fade-in">Featured Collection</h2>
+        <div class="products-grid">
+            <div class="product-card fade-in">
+                <div class="product-image">👟</div>
+                <div class="product-info">
+                    <h3>Premium Sports Sneakers</h3>
+                    <p>Lightweight & breathable design</p>
+                    <span class="availability available">✓ Available</span>
+                    <div class="price">₹2,999+</div>
+                </div>
+            </div>
+            <div class="product-card fade-in">
+                <div class="product-image">👞</div>
+                <div class="product-info">
+                    <h3>Classic Formal Oxford</h3>
+                    <p>Genuine leather craftsmanship</p>
+                    <span class="availability available">✓ Available</span>
+                    <div class="price">₹3,499+</div>
+                </div>
+            </div>
+            <div class="product-card fade-in">
+                <div class="product-image">👠</div>
+                <div class="product-info">
+                    <h3>Elegant Stiletto Heels</h3>
+                    <p>Perfect for special occasions</p>
+                    <span class="availability available">✓ Available</span>
+                    <div class="price">₹2,799+</div>
+                </div>
+            </div>
+            <div class="product-card fade-in">
+                <div class="product-image">🥾</div>
+                <div class="product-info">
+                    <h3>Adventure Hiking Boots</h3>
+                    <p>Waterproof & durable</p>
+                    <span class="availability available">✓ Available</span>
+                    <div class="price">₹4,299+</div>
+                </div>
+            </div>
+            <div class="product-card fade-in">
+                <div class="product-image">🩴</div>
+                <div class="product-info">
+                    <h3>Comfort Slide Sandals</h3>
+                    <p>Perfect for casual wear</p>
+                    <span class="availability available">✓ Available</span>
+                    <div class="price">₹899+</div>
+                </div>
+            </div>
+            <div class="product-card fade-in">
+                <div class="product-image">👶</div>
+                <div class="product-info">
+                    <h3>Kids Fun Sneakers</h3>
+                    <p>Colorful & comfortable</p>
+                    <span class="availability available">✓ Available</span>
+                    <div class="price">₹1,499+</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title fade-in">About Shoe Factory</h2>
+        <div class="about-content">
+            <div class="about-text fade-in">
+                <h2>Your Trusted Footwear Destination</h2>
+                <p>Welcome to <strong>Shoe Factory</strong>, Udaipur's premier destination for quality footwear. Located in the heart of Shobhagpura on 100ft Road, we've been serving the community with an extensive collection of shoes for every occasion.</p>
+                <p>From sports enthusiasts to fashion-forward individuals, we cater to all your footwear needs. Our curated collection features the latest trends, timeless classics, and everything in between.</p>
+                <p><strong>Open Daily:</strong> 9:00 AM - 9:00 PM</p>
+                <p>Visit us to experience premium quality, unbeatable variety, and exceptional service. At Shoe Factory, every step you take tells a story!</p>
+            </div>
+            <div class="about-image fade-in">
+                👟
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2 class="section-title fade-in">Visit Us Today</h2>
+        <div class="contact-grid">
+            <div class="contact-info fade-in">
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-details">
+                        <h3>Location</h3>
+                        <p>100ft Road, Shobhagpura<br>Udaipur, Rajasthan</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-details">
+                        <h3>Phone</h3>
+                        <p>+91 7737332806</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">✉️</div>
+                    <div class="contact-details">
+                        <h3>Email</h3>
+                        <p>maheshpaliwal2806@gmail.com</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🕒</div>
+                    <div class="contact-details">
+                        <h3>Opening Hours</h3>
+                        <p>Daily: 9:00 AM - 9:00 PM</p>
+                    </div>
+                </div>
+            </div>
+            <div class="map-container fade-in">
+                🗺️
+                <p style="font-size: 1rem; color: var(--gray); position: absolute; bottom: 20px;">100ft Road, Shobhagpura, Udaipur</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Shoe Factory. All Rights Reserved. | Where Every Step Tells a Story</p>
+    </footer>
+
+    <script>
+        // Animated Background Particles
+        const bgAnimation = document.getElementById('bgAnimation');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.width = Math.random() * 100 + 50 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = Math.random() * 20 + 10 + 's';
+            bgAnimation.appendChild(particle);
+        }
+
+        // Header Scroll Effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll Animation Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Product Card 3D Effect
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+
+        // Category Card 3D Rotation
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 15;
+                const rotateY = (centerX - x) / 15;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-15px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
